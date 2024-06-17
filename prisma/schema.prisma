@@ -1,0 +1,29 @@
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-arm64-openssl-3.0.x"]
+}
+
+model Article {
+  id          Int      @id @default(autoincrement())
+  source      String
+  title       String   @unique
+  description String
+  url         String   @unique
+  author      String
+  text        String
+  publishedAt DateTime
+  createdAt   DateTime @default(now())
+  Image       Image[]
+}
+
+model Image {
+  id        Int     @id @default(autoincrement())
+  title     String
+  articleId Int
+  article   Article @relation(fields: [articleId], references: [id])
+}
